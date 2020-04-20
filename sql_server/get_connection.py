@@ -10,6 +10,8 @@ import time
 
 import pymssql
 
+from log import logger
+
 server = '192.168.0.115'  # 数据库服务器名称或IP
 user = 'sa'  # 用户名
 password = '1996Chan'  # 密码
@@ -41,8 +43,8 @@ class SqlServer:
             self.get_conn()
             return True
         except Exception as ex:
-            print("sqlserver连接失败")
-            print(ex)
+            logger.error("sqlserver连接失败")
+            logger.info(ex)
 
     def get_conn(self):
         self.close_conn()
@@ -70,6 +72,6 @@ if __name__ == '__main__':
         cursor = conn.cursor()
         cursor.execute(sql)
         for row in cursor:
-            print([i.encode("latin-1").decode("gbk") if isinstance(i, str) else i for i in row])
+            logger.info([i.encode("latin-1").decode("gbk") if isinstance(i, str) else i for i in row])
     else:
-        print("连接未成功")
+        logger.error("连接未成功")
