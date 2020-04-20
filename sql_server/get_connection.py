@@ -10,14 +10,14 @@ import time
 
 import pymssql
 
-server = '127.0.0.1'  # 数据库服务器名称或IP
+server = '192.168.0.115'  # 数据库服务器名称或IP
 user = 'sa'  # 用户名
-password = '13486059134Chen'  # 密码
+password = '1996Chan'  # 密码
 database = 'new_con'  # 数据库名称
 charset = 'utf8'
-conn = pymssql.connect(host=server, user=user, password=password, database=database, charset=charset)
-
-cursor = conn.cursor()
+# conn = pymssql.connect(host=server, user=user, password=password, database=database, charset=charset)
+#
+# cursor = conn.cursor()
 
 
 class SqlServer:
@@ -34,6 +34,15 @@ class SqlServer:
         self.conn = None
         self.close_at = None
         self.conn_age = 20
+        self.conn_success = self._test_conn()
+
+    def _test_conn(self):
+        try:
+            self.get_conn()
+            return True
+        except Exception as ex:
+            print("sqlserver连接失败")
+            print(ex)
 
     def get_conn(self):
         self.close_conn()
@@ -53,11 +62,14 @@ class SqlServer:
 connection = SqlServer()
 
 if __name__ == '__main__':
-    conn = connection.get_conn()
-    sql = "SELECT grxx_tb.cardnum, grxx_tb.name, group_tb.groupshortname, grxx_tb.REGSTATE" \
-          " FROM grxx_tb, group_tb WHERE grxx_tb.groupid= group_tb.groupid AND grxx_tb.groupid= 2 " \
-          "AND regstate = 0 ORDER BY grxx_tb.groupid"
-    cursor = conn.cursor()
-    cursor.execute(sql)
-    for row in cursor:
-        print([i.encode("latin-1").decode("gbk") if isinstance(i, str) else i for i in row])
+    if connection.conn_success:
+        conn = connection.get_conn()
+        sql = "SELECT grxx_tb.cardnum, grxx_tb.name, group_tb.groupshortname, grxx_tb.REGSTATE" \
+              " FROM grxx_tb, group_tb WHERE grxx_tb.groupid= group_tb.groupid AND grxx_tb.groupid= 2 " \
+              "AND regstate = 0 ORDER BY grxx_tb.groupid"
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        for row in cursor:
+            print([i.encode("latin-1").decode("gbk") if isinstance(i, str) else i for i in row])
+    else:
+        print("连接未成功")

@@ -35,7 +35,7 @@ class Login:
         self.code = 181001
         # self.login_url = 'http://127.0.0.1/v1/auth/login/'
         # self.login_url = 'http://112.13.89.101:9511/v1/auth/login/'
-        self.login_url = 'https://snpc.zhijiasoft.com/v1/auth/login/'
+        self.login_url = 'https://snpctest.zhijiasoft.com/v1/auth/login/'
 
     def get_token(self):
         p_rep = ApiRequest.post(url=self.login_url, data=self._get_data())
@@ -95,12 +95,15 @@ class DataTransmit:
 
     def get_sql_server_data(self):
         conn = self.connection.get_conn()
-        cursor = self._execute(conn, self.get_staff_info_sql)
-        result = []
-        for row in cursor:
-            result.append([i.encode("latin-1").decode("gbk") if isinstance(i, str) else i for i in row])
-        print(f"获取人员数据{result}")
-        return result
+        if conn:
+            cursor = self._execute(conn, self.get_staff_info_sql)
+            result = []
+            for row in cursor:
+                result.append([i.encode("latin-1").decode("gbk") if isinstance(i, str) else i for i in row])
+            print(f"获取人员数据{result}")
+            return result
+        else:
+            return None
 
     def _execute(self, conn: connect, sql):
         cursor = conn.cursor()
@@ -109,10 +112,10 @@ class DataTransmit:
 
     def trans_to_9511(self, data, headers=None):
         # _url = 'http://127.0.0.1/v1/app/conference/staff/createOrUpdateConferenceUserInfo/'
-        # _url = 'http://112.13.89.101:9511/v1/app/conference/staff/createOrUpdateConferenceUserInfo/'
-        _url = 'https://snpc.zhijiasoft.com/v1/app/conference/staff/createOrUpdateConferenceUserInfo/'
+        _url = 'https://snpctest.zhijiasoft.com/v1/app/conference/staff/createOrUpdateConferenceUserInfo/'
+        # _url = 'https://snpc.zhijiasoft.com/v1/app/conference/staff/createOrUpdateConferenceUserInfo/'
         res = ApiRequest.post(url=_url, data=data, headers=headers)
-        print(f"推送至9511{res.get('data')}")
+        print(f"推送至test{res.get('data')}")
         return res
 
 
