@@ -21,8 +21,8 @@ class ApiRequest:
     def post(url, data, headers=None):
         try:
             p_rep = requests.post(url=url, data=data, headers=headers).json()
-        except requests.exceptions.ConnectionError:
-            print("===登录连接失败====")
+        except requests.exceptions.ConnectionError as ex:
+            print(f"===登录连接失败===={ex}")
         else:
             return p_rep
 
@@ -34,8 +34,8 @@ class Login:
         self.source = 2  # 1 pc   2 app
         self.code = 181001
         # self.login_url = 'http://127.0.0.1/v1/auth/login/'
-        # self.login_url = 'http://112.13.89.101:9511/v1/auth/login/'
         self.login_url = 'https://snpctest.zhijiasoft.com/v1/auth/login/'
+        # self.login_url = 'https://snpc.zhijiasoft.com/v1/auth/login/'
 
     def get_token(self):
         p_rep = ApiRequest.post(url=self.login_url, data=self._get_data())
@@ -115,6 +115,8 @@ class DataTransmit:
         _url = 'https://snpctest.zhijiasoft.com/v1/app/conference/staff/createOrUpdateConferenceUserInfo/'
         # _url = 'https://snpc.zhijiasoft.com/v1/app/conference/staff/createOrUpdateConferenceUserInfo/'
         res = ApiRequest.post(url=_url, data=data, headers=headers)
+        if not res:
+            res = {}
         print(f"推送至test{res.get('data')}")
         return res
 
@@ -130,14 +132,8 @@ if __name__ == '__main__':
         keys = d_t.keys.get("get_staff_info_sql")
         data = []
         for i in data_result:
-            data.append({keys[inx]: v for inx, v in enumerate(i)})
+            data.append({keys[inx]: v.replace("\u3000", "") if inx == 1 else v for inx, v in enumerate(i)})
         # 接口传输数据
         res = d_t.trans_to_9511(data={"p_l": json.dumps(data)}, headers={"Authorization": d_t.token})
         print("\n\n")
         time.sleep(20)
-
-
-
-
-
-
