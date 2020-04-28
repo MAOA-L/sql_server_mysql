@@ -13,7 +13,7 @@ from urllib.parse import urlencode
 import requests
 from pymssql import connect
 
-from sql_server.get_connection import connection
+from sql_server.get_connection_1 import connection
 
 
 class ApiRequest:
@@ -86,6 +86,7 @@ class DataTransmit:
             self.close_at = time.time()
             return self.t
         token = AppLogin.get_token()
+        # token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiZjRkN2M4ODItMjQzYy0xMWU5LWIxMjQtZTBkNTVlOGYyZDlhIiwidXNlcm5hbWUiOiIxMzkwNTc0MDA5NSIsImV4cCI6MTU5MDQ3NzY0MiwiZm9yIjoxLCJlbWFpbCI6bnVsbCwic291cmNlIjoyLCJwd2RfdmVyc2lvbiI6MSwiaXNzdWVyIjoiemhyZC5uYnJkLmdvdi5jbiJ9.dYA494ZVoYcZmDW7iuL45PdH5oshw6W8uJ5bzx43zj4'
         self.t = token
         return token
 
@@ -99,7 +100,8 @@ class DataTransmit:
             cursor = self._execute(conn, self.get_staff_info_sql)
             result = []
             for row in cursor:
-                result.append([i.encode("latin-1").decode("gbk") if isinstance(i, str) else i for i in row])
+                # result.append([i.encode("latin-1").decode("gbk") if isinstance(i, str) else i for i in row])
+                result.append([i if isinstance(i, str) else i for i in row])
             print(f"获取人员数据{len(result)}条")
             return result
         else:
@@ -117,7 +119,7 @@ class DataTransmit:
         res = ApiRequest.post(url=_url, data=data, headers=headers)
         if not res:
             res = {}
-        print(f"推送至test{res.get('data')}")
+        print(f"推送{res.get('data')}")
         return res
 
 
@@ -136,4 +138,4 @@ if __name__ == '__main__':
         # 接口传输数据
         res = d_t.trans_to_9511(data={"p_l": json.dumps(data)}, headers={"Authorization": d_t.token})
         print("\n\n")
-        time.sleep(20)
+        time.sleep(4)
