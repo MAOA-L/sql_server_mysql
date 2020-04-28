@@ -13,14 +13,17 @@ import pyodbc
 
 from log import logger
 
-# server = 'server'  # 数据库服务器名称或IP
-server = '127.0.0.1'  # 数据库服务器名称或IP
+server = 'server'  # 数据库服务器名称或IP
+# server = '127.0.0.1'  # 数据库服务器名称或IP
+
+password = 'sa'  # 密码
+# password = '13486059134Chen'  # 密码
+
 user = 'sa'  # 用户名
-# password = 'sa'  # 密码
-password = '13486059134Chen'  # 密码
 database = 'con1'  # 数据库名称
-# database = 'new_con'  # 数据库名称
 charset = 'utf8'
+
+
 # conn = pymssql.connect(host=server, user=user, password=password, database=database, charset=charset)
 #
 # cursor = conn.cursor()
@@ -56,7 +59,8 @@ class SqlServer:
             _current_time = time.time()
             # self.conn = pymssql.connect(server=self.server, user=self.user, password=self.password,
             #                             database=self.database, charset=self.charset)
-            self.conn = pyodbc.connect("DRIVER={SQL Server};SERVER=127.0.0.1;UID=sa;PWD=13486059134Chen;DATABASE=con1")
+            self.conn = pyodbc.connect("DRIVER={SQL Server};SERVER=%s;UID=%s;PWD=%s;DATABASE=%s" % (
+            self.server, self.user, self.password, self.database))
             self.close_at = _current_time + self.conn_age * 1000
         return self.conn
 

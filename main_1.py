@@ -32,10 +32,10 @@ class Login:
         self.phone = 13905740095
         self.way = 3
         self.source = 2  # 1 pc   2 app
-        self.code = 181001
+        self.code = 190425
         # self.login_url = 'http://127.0.0.1/v1/auth/login/'
-        self.login_url = 'https://snpctest.zhijiasoft.com/v1/auth/login/'
-        # self.login_url = 'https://snpc.zhijiasoft.com/v1/auth/login/'
+        # self.login_url = 'https://snpctest.zhijiasoft.com/v1/auth/login/'
+        self.login_url = 'https://snpc.zhijiasoft.com/v1/auth/login/'
 
     def get_token(self):
         p_rep = ApiRequest.post(url=self.login_url, data=self._get_data())
@@ -114,8 +114,8 @@ class DataTransmit:
 
     def trans_to_9511(self, data, headers=None):
         # _url = 'http://127.0.0.1/v1/app/conference/staff/createOrUpdateConferenceUserInfo/'
-        _url = 'https://snpctest.zhijiasoft.com/v1/app/conference/staff/createOrUpdateConferenceUserInfo/'
-        # _url = 'https://snpc.zhijiasoft.com/v1/app/conference/staff/createOrUpdateConferenceUserInfo/'
+        # _url = 'https://snpctest.zhijiasoft.com/v1/app/conference/staff/createOrUpdateConferenceUserInfo/'
+        _url = 'https://snpc.zhijiasoft.com/v1/app/conference/staff/createOrUpdateConferenceUserInfo/'
         res = ApiRequest.post(url=_url, data=data, headers=headers)
         if not res:
             res = {}
